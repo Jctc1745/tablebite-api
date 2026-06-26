@@ -16,19 +16,19 @@ public class ProductoController {
     @Autowired
     private ProductoRepository repo;
 
-    // GET todos los productos
+    
     @GetMapping
     public List<Producto> listar() {
         return repo.findAll();
     }
 
-    // GET solo disponibles
+    
     @GetMapping("/disponibles")
     public List<Producto> listarDisponibles() {
         return repo.findByDisponibleTrue();
     }
 
-    // GET por id
+   
     @GetMapping("/{id}")
     public ResponseEntity<Producto> obtener(@PathVariable Long id) {
         return repo.findById(id)
@@ -36,14 +36,13 @@ public class ProductoController {
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST crear producto
+    
    @PostMapping
     public Producto crear(@RequestBody Producto producto) {
         producto.setId(null); // ← forzar que sea nuevo
          return repo.save(producto);
 }
 
-    // PUT actualizar producto
     @PutMapping("/{id}")
     public ResponseEntity<Producto> actualizar(
             @PathVariable Long id,
@@ -59,7 +58,7 @@ public class ProductoController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE eliminar producto
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         if (repo.existsById(id)) {
