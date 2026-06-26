@@ -1,10 +1,12 @@
 package com.tablebite.api.controller;
 
 import com.tablebite.api.model.Pedido;
+import com.tablebite.api.model.PedidoItem;
 import com.tablebite.api.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.tablebite.api.model.PedidoItem;
 
 import java.util.List;
 import java.util.Map;
@@ -45,11 +47,19 @@ public class PedidoController {
 
     // POST crear pedido
     @PostMapping
-    public Pedido crear(@RequestBody Pedido pedido) {
-        pedido.setEstado("PENDIENTE");
-        pedido.setCreadoEn(System.currentTimeMillis());
-        return repo.save(pedido);
+public Pedido crear(@RequestBody Pedido pedido) {
+    pedido.setEstado("PENDIENTE");
+    pedido.setCreadoEn(System.currentTimeMillis());
+
+    
+    if (pedido.getItems() != null) {
+        for (PedidoItem item : pedido.getItems()) {
+            item.setPedido(pedido);
+        }
     }
+
+    return repo.save(pedido);
+}
 
     // PUT cambiar estado
     @PutMapping("/{id}/estado")
